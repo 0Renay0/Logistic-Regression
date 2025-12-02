@@ -3,119 +3,13 @@ from sklearn import metrics
 from sklearn.linear_model import LogisticRegression
 import matplotlib.pyplot as plt 
 import random
+from utils import vector_infos, make_data, plot_data, plot_results
 
-# Funcions from Fidle
-def vector_infos(name, V):
-    # Print basic information about a vector
-    with np.printoptions(precision=4, suppress=True):
-        print(f"{name}:")
-        print(f"  Shape: {V.shape}")
-        print(f"  Dtype: {V.dtype}")
-        print(f"  Min: {V.min()}")
-        print(f"  Max: {V.max()}")
-        print(f"  Mean: {V.mean()}")
-        print(f"  Std: {V.std()}")
-        print()
-        
-        
-def Decision(work,sleep):
-    # return 1 if success, 0 if fail depending on work and sleep hours 
-    work_min = 4
-    sleep_min = 5
-    game_max = 3
-    
-    if sleep < sleep_min:
-        return 0  # fail ! 
-    if work < work_min:
-        return 0  # fail !
-    
-    game = 24 - 10 -(work + sleep) + random.gauss(0,0.5)
-    if game > game_max:
-        return 0  # fail
-    
-    return 1  # success !
+"""
+Main Script for Logistic Regression Example
+"""    
 
-
-def make_data(size,noise):
-    # Generate dataset of given size of people with work and sleep hours
-    x = []
-    y = []
-    for i in range (size):
-        work = random.gauss(5,1)  # average 5 hours of work
-        sleep = random.gauss(7,1.5) 
-        r = Decision(work,sleep)
-        x.append([work, sleep])
-        y.append(r)
-    return np.array(x), np.array(y)
-
-def plot_data(x, y, colors=('green', 'red'), legend = True):
-    fig, ax = plt.subplots(1,1)
-    fig.set_size_inches(10,8)
-    
-    ax.plot(x[y==1, 0], x[y==1, 1], 'o', color=colors[0], markersize=4, label='Success')
-    ax.plot(x[y==0, 0], x[y==0, 1], 'o', color=colors[1], markersize=4, label='Fail')
-
-    if legend:
-        ax.legend()
-        
-    plt.tick_params(axis='both', which='both', bottom=False, left=False, labelbottom=False, labelleft=False)
-    plt.xlabel("Work hours")
-    plt.ylabel("Sleep hours")
-    plt.savefig("data_plot.png", dpi=140)
-    plt.show()    
-    
-def plot_results(x_test,y_test, y_pred):
-    '''Affiche un resultat'''
-
-    precision = metrics.precision_score(y_test, y_pred)
-    recall    = metrics.recall_score(y_test, y_pred)
-
-    print("Accuracy = {:5.3f}    Recall = {:5.3f}".format(precision, recall))
-
-    x_pred_positives = x_test[ y_pred == 1 ]     # items prédits    positifs
-    x_real_positives = x_test[ y_test == 1 ]     # items réellement positifs
-    x_pred_negatives = x_test[ y_pred == 0 ]     # items prédits    négatifs
-    x_real_negatives = x_test[ y_test == 0 ]     # items réellement négatifs
-
-    
-    fig, axs = plt.subplots(2, 2)
-    fig.subplots_adjust(wspace=.1,hspace=0.2)
-    fig.set_size_inches(14,10)
-    
-    axs[0,0].plot(x_pred_positives[:,0], x_pred_positives[:,1], 'o',color='lightgreen', markersize=10, label="Prédits positifs")
-    axs[0,0].plot(x_real_positives[:,0], x_real_positives[:,1], 'o',color='green',      markersize=4,  label="Réels positifs")
-    axs[0,0].legend()
-    axs[0,0].tick_params(axis='both', which='both', bottom=False, left=False, labelbottom=False, labelleft=False)
-    axs[0,0].set_xlabel('$x_1$')
-    axs[0,0].set_ylabel('$x_2$')
-
-
-    axs[0,1].plot(x_pred_negatives[:,0], x_pred_negatives[:,1], 'o',color='lightsalmon', markersize=10, label="Prédits négatifs")
-    axs[0,1].plot(x_real_negatives[:,0], x_real_negatives[:,1], 'o',color='red',        markersize=4,  label="Réels négatifs")
-    axs[0,1].legend()
-    axs[0,1].tick_params(axis='both', which='both', bottom=False, left=False, labelbottom=False, labelleft=False)
-    axs[0,1].set_xlabel('$x_1$')
-    axs[0,1].set_ylabel('$x_2$')
-    
-    axs[1,0].plot(x_pred_positives[:,0], x_pred_positives[:,1], 'o',color='lightgreen', markersize=10, label="Prédits positifs")
-    axs[1,0].plot(x_pred_negatives[:,0], x_pred_negatives[:,1], 'o',color='lightsalmon', markersize=10, label="Prédits négatifs")
-    axs[1,0].plot(x_real_positives[:,0], x_real_positives[:,1], 'o',color='green',      markersize=4,  label="Réels positifs")
-    axs[1,0].plot(x_real_negatives[:,0], x_real_negatives[:,1], 'o',color='red',        markersize=4,  label="Réels négatifs")
-    axs[1,0].tick_params(axis='both', which='both', bottom=False, left=False, labelbottom=False, labelleft=False)
-    axs[1,0].set_xlabel('$x_1$')
-    axs[1,0].set_ylabel('$x_2$')
-
-    axs[1,1].pie([precision,1-precision], explode=[0,0.1], labels=["","Errors"], 
-                 autopct='%1.1f%%', shadow=False, startangle=70, colors=["lightsteelblue","coral"])
-    axs[1,1].axis('equal')
-    
-    plt.savefig("results_train_plot.png", dpi=140)
-    plt.show()
-        
-        
-        
-        
-# Parameters Config 
+#========================== Parameters Config 
 data_size = 1000 
 data_cols = 2 
 data_noise = 0.2
@@ -125,30 +19,32 @@ random.seed(random_seed)
 np.random.seed(random_seed)
 
 
-# Generate Data
+#========================== Generate Data
 x, y = make_data(data_size, data_noise)
 
-# Visualize Data
-plot_data(x, y)
+#------------ Visualize Data
+plot_data(x, y, legend=True,title="Data Distribution")
 vector_infos("Feature X", x)
 vector_infos("Labels y", y)
 
 
-# Prepare data for training and testing
+#------------ Prepare data for training and testing
 split_ratio = 0.8
 n = int(data_size*split_ratio)
 
 x_train, x_test = x[:n], x[n:]
 y_train, y_test = y[:n], y[n:]
 
-# Normalization
+plot_data(x_test, y_test, colors=('gray', 'gray'), legend=True, title="Data to classify", fig_name="data_to_classify.png")
+
+#------------ Normalization
 mean = x_train.mean(axis=0)
 std = x_train.std(axis=0)
 
 x_train = (x_train - mean) / std
 x_test = (x_test - mean) / std
 
-# Log info. 
+#------------ Log info. 
 
 vector_infos("Training Feature X_train", x_train)
 vector_infos("Training Labels y_train", y_train)
@@ -156,15 +52,43 @@ vector_infos("Testing Feature X_test", x_test)
 vector_infos("Testing Labels y_test", y_test)
 
 
-# Training 
-logreg = LogisticRegression(C=1e5, verbose=1, solver='saga')
-
+# ============ Training ============ 
+""" 
+We can choose different solvers for optimization:
+'liblinear', 'newton-cg', 'sag', 'saga' and 'lbfgs'
+"""
+logreg = LogisticRegression(C=1000, verbose=0, solver='saga')
+#------------ Fit the data.
 logreg.fit(x_train, y_train)
 
-# Predection
+#------------ Predict
 y_pred = logreg.predict(x_test)
 
-# Evaluation
-plot_results(x_test, y_test, y_pred)
+#------------ Evaluate
+plot_results(x_test, y_test, y_pred, fig_name="results_train_plot.png")
 
 
+#============ Enhance data ============
+
+x_train_enhanced = np.c_[x_train,
+                         x_train[:, 0] ** 2,
+                         x_train[:, 1] ** 2,
+                         x_train[:, 0] ** 3,
+                         x_train[:, 1] ** 3]
+
+x_test_enhanced = np.c_[x_test,
+                        x_test[:, 0] ** 2,
+                        x_test[:, 1] ** 2,
+                        x_test[:, 0] ** 3,
+                        x_test[:, 1] ** 3]
+
+
+logreg = LogisticRegression(C=1e5, verbose=0, solver='saga', max_iter=5000, n_jobs=-1)
+
+#------------ Fit the data.
+logreg.fit(x_train_enhanced, y_train)
+
+#------------ Predict
+y_pred = logreg.predict(x_test_enhanced)
+#------------ Evaluate
+plot_results(x_test_enhanced, y_test, y_pred, fig_name="results_train_plot_enhanced.png")
