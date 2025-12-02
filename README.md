@@ -17,3 +17,10 @@ have at least 4 hours of work, 5 hours of sleep and 3 hours at maximum spent on 
 
 ## Results on test set
 ![Results on test set](results_train_plot.png)
+
+
+## Enhanced data
+....
+
+## Results on test set 
+![Results on test set](results_train_plot_enhanced.png)
