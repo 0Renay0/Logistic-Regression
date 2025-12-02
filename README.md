@@ -13,11 +13,14 @@ $X=(x_{1},x_{2})^T$
 
 with $x_1$ the number of hours of work and $x_2$ the number of hours of sleep.
 
-$Y = $
+$$
+Y = 
 \begin{cases}
-$1$ \\
-$0$
+1 
+0
 \end{cases}
+$$
+
 ![Data Distribution](data_plot.png)
 
 
