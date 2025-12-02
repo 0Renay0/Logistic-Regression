@@ -82,5 +82,35 @@ def plot_data(x, y, colors=('green', 'red'), legend = True):
         fig.set_size_inches(14,10)
         
         # Predicted Vs Real positive
-        axs[0,0].plot(x_pred_pos[:, 0], x_pred_pos[:, 1], 'o', markersize=4, label='Predicted Positive')
+        axs[0,0].plot(x_pred_pos[:, 0], x_pred_pos[:, 1], 'o', markersize=10, label='Predicted Positive')
         axs[0,0].plot(x_real_pos[:, 0], x_real_pos[:, 1], 'x', markersize=4, label='Real Positive')
+        
+        axs[0,0].legend()
+        axs[0,0].tick_params(axis='both', which='both', bottom=False, left=False, labelbottom=False, labelleft=False)
+        
+        axs[0,0].set_xlabel('$x_1$')
+        axs[0,0].set_ylabel('$x_2$')
+        
+        # Predicted Vs Real negative
+        axs[0,1].plot(x_pred_neg[:, 0], x_pred_neg[:, 1], 'o', markersize=10, label='Predicted Negative')
+        axs[0,1].plot(x_real_neg[:, 0], x_real_neg[:, 1], 'x', markersize=4, label='Real Negative')
+        axs[0,1].legend()
+        axs[0,1].tick_params(axis='both', which='both', bottom=False, left=False, labelbottom=False, labelleft=False)
+        axs[0,1].set_xlabel('$x_1$')
+        axs[0,1].set_ylabel('$x_2$')
+        
+        # Superposition 
+        axs[1,0].plot(x_pred_pos[:, 0], x_pred_pos[:, 1], 'o', markersize=10, label='Predicted Positive')
+        axs[1,0].plot(x_real_neg[:, 0], x_real_neg[:, 1], 'x', markersize=4, label='Real Negative')
+        axs[1,0].plot(x_real_pos[:, 0], x_real_pos[:, 1], 'x', markersize=4, label='Real Positive')
+        axs[1,0].plot(x_pred_neg[:, 0], x_pred_neg[:, 1], 'o', markersize=10, label='Predicted Negative')
+        axs[1,0].tick_params(axis='both', which='both', bottom=False, left=False, labelbottom=False, labelleft=False)
+        axs[1,0].set_xlabel('$x_1$')
+        axs[1,0].set_ylabel('$x_2$')
+        
+        # camembert of results
+        axs[1,1].pie([Precision, 1-Precision], explode= [0, 0.1], labels=['','Errors'], autopct='%1.1f%%', shadow=False, startangle=70)
+        axs[1,1].axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+        
+        plt.show()
+        
