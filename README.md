@@ -16,8 +16,8 @@ with $x_1$ the number of hours of work and $x_2$ the number of hours of sleep.
 $$
 Y = 
 \begin{cases}
-1 
-0
+1 \quad \text{Success} \\
+0 \quad \text{fail}
 \end{cases}
 $$
 
