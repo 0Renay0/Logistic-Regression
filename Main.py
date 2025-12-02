@@ -29,7 +29,7 @@ def Decision(work,sleep):
     if work < work_min:
         return 0  # fail !
     
-    game = 24 - (work + sleep) + random.gauss(0,0.5)
+    game = 24 - 10 -(work + sleep) + random.gauss(0,0.5)
     if game > game_max:
         return 0  # fail
     
@@ -61,10 +61,10 @@ def plot_data(x, y, colors=('green', 'red'), legend = True):
     plt.tick_params(axis='both', which='both', bottom=False, left=False, labelbottom=False, labelleft=False)
     plt.xlabel("Work hours")
     plt.ylabel("Sleep hours")
-    plt.show()
+    plt.savefig("data_plot.png", dpi=140)
+    plt.show()    
     
-    
-    def plot_results(x_test, y_test, y_pred):
+def plot_results(x_test, y_test, y_pred):
         
         Precision = metrics.precision_score(y_test, y_pred)
         Recall = metrics.recall_score(y_test, y_pred)
@@ -114,3 +114,44 @@ def plot_data(x, y, colors=('green', 'red'), legend = True):
         
         plt.show()
         
+        
+# Parameters Config 
+data_size = 1000 
+data_cols = 2 
+data_noise = 0.2
+random_seed = 123
+        
+random.seed(random_seed)
+np.random.seed(random_seed)
+
+
+# Generate Data
+x, y = make_data(data_size, data_noise)
+
+# Visualize Data
+plot_data(x, y)
+vector_infos("Feature X", x)
+vector_infos("Labels y", y)
+
+
+# Prepare data for training and testing
+split_ratio = 0.8
+n = int(data_size*split_ratio)
+
+x_train, x_test = x[:n], x[n:]
+y_train, y_test = y[:n], y[n:]
+
+# Normalization
+mean = x_train.mean(axis=0)
+std = x_train.std(axis=0)
+
+x_train = (x_train - mean) / std
+x_test = (x_test - mean) / std
+
+# Log info. 
+
+vector_infos("Training Feature X_train", x_train)
+vector_infos("Training Labels y_train", y_train)
+vector_infos("Testing Feature X_test", x_test)
+vector_infos("Testing Labels y_test", y_test)
+
