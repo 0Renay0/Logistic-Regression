@@ -4,11 +4,11 @@ The implementation includes data generation, normalization, model training, and 
 
 ## Context 
 The success of the exam of a group of students depends on how long they worked and slept. To succeed in the exam, the student should
-have at least 4 hours of work, 5 hours of sleep and 3 hours at maximum spent on games. Otherwise, they fail. 
-
-
+have at least 4 hours of work, 5 hours of sleep and 3 hours at maximum spent on games. Otherwise, they fail.
 
 ## Data 
+The data set is composed of two vectors, 'X' is the observation vector and 'Y' is the class vector. 'X' is equal to $(x_{1},x_{2})^T$
+
 ![Data Distribution](data_plot.png)
 
 
